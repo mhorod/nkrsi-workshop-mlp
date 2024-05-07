@@ -4,18 +4,13 @@ import torchvision.datasets.mnist as mnist
 
 from model import get_model
 
-def main():
-    dataset = mnist.MNIST('./data', download=True)
-    
-    model = get_model()
-    
+def train_model(model, train_dataset):
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     loss_func = torch.nn.MSELoss()
     
-    total_loss = 0
-    proper_answers = 0
+    total_loss = 0    
     
-    for i, (image, label) in enumerate(dataset):
+    for i, (image, label) in enumerate(train_dataset):
         image = torchvision.transforms.ToTensor()(image)
         label = torch.tensor(label)
         
@@ -33,16 +28,37 @@ def main():
         optimizer.step()
         
         total_loss += loss.item()
-        
-        answer = torch.argmax(output).item()
-
-        if answer == label:
-            proper_answers += 1
-        
-
+            
         if i % 100 == 0:
             print(f'Loss: {total_loss / (i + 1)}')
-            print(f'Accuracy: {proper_answers / (i+1)}')
+    
+def evaluate_model(model, test_dataset):
+    correct = 0
+    total = 0
+    
+    for i, (image, label) in enumerate(test_dataset):
+        image = torchvision.transforms.ToTensor()(image)
+        label = torch.tensor(label)
+        
+        flattened_image = torch.nn.Flatten()(image)
+        output = model(flattened_image)
+        
+        prediction = torch.argmax(output)
+        
+        if prediction == label:
+            correct += 1
+        
+        total += 1
+        
+    print(f'Accuracy: {correct / total}')
+
+def main():
+    train_dataset = mnist.MNIST('./data_train', train=True, download=True)
+    test_dataset = mnist.MNIST('./data_test', train=False, download=True)
+    
+    model = get_model()
+    train_model(model, train_dataset)
+    evaluate_model(model, test_dataset)
 
     torch.save(model.state_dict(), 'model.pth')
     
