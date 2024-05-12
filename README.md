@@ -19,3 +19,7 @@ Hints:
     - calculates `dy, df, dW, dz`
     - updates network weights `W -= learning_rate * dW`
   - Write `train` function that iterates `forward` and `backward` certain number of times
+
+## Exercise 2 
+
+Train a MLP on the FashionMNIST dataset (see: https://pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html) 
