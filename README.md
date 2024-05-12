@@ -2,12 +2,7 @@
 
 ## Exercise
 
-Fill in `train.py` with your code so there is MLP being trained on provided MNIST dataset.
-
-Hint: Use `torch.nn.Linear` and `torch.nn.ReLU`
-
-Try experimenting with different layer sizes and activation functions.
-
+Train a MLP on the MNIST dataset. A (very simple) solution is provided in this repository. You can change the model definition in `model.py` to improve your results.
 
 ## Bonus
 
